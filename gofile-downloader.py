@@ -46,7 +46,7 @@ def _print(_str: str) -> None:
 # increase max_workers for parallel downloads
 # defaults to 5 download at time
 class Main:
-    def __init__(self, url: str, password: str | None = None, max_workers: int = 5) -> None:
+    def __init__(self, url: str, password: str = None, max_workers: int = 5) -> None:
 
 
         try:
@@ -58,7 +58,7 @@ class Main:
             die(f"Something is wrong with the url: {url}.")
 
 
-        self._downloaddir: str | None = getenv("GF_DOWNLOADDIR")
+        self._downloaddir = '/home/threatintel/leaked_data/LEAKED_DATA/high_priority/Stealer_Logs'
 
         if self._downloaddir and path.exists(self._downloaddir):
             chdir(self._downloaddir)
@@ -66,7 +66,7 @@ class Main:
         self._root_dir: str = path.join(getcwd(), self._id)
         self._token: str = self._getToken()
         self._url: str = f"https://api.gofile.io/getContent?contentId={self._id}&token={self._token}&websiteToken=7fd94ds12fds4&cache=true"
-        self._password: str | None = sha256(password.encode()).hexdigest() if password else None
+        self._password = sha256(password.encode()).hexdigest() if password else None
         self._max_workers: int = max_workers
 
         # list of files and its respective path, uuid, filename and link
@@ -194,7 +194,7 @@ class Main:
                 return
 
             with open(uuid, 'wb+') as handler:
-                has_size: str | None = response_handler.headers.get('Content-Length')
+                has_size = response_handler.headers.get('Content-Length')
 
                 total_size: float
 
@@ -213,7 +213,7 @@ class Main:
                 _print(f"\rDownloaded {filename}: 100.0%!" + NEW_LINE)
 
 
-    def _parseLinks(self, _id: str, token: str, password: str | None = None) -> None:
+    def _parseLinks(self, _id: str, token: str, password: str = None) -> None:
         """
         Parses for possible links recursively and populate a list with file's info.
 
@@ -263,8 +263,8 @@ if __name__ == '__main__':
         from sys import argv
 
 
-        url: str | None = None
-        password: str | None = None
+        url = None
+        password = None
 
         argc: int = len(argv)
 
@@ -287,4 +287,3 @@ if __name__ == '__main__':
             )
     except KeyboardInterrupt:
         exit(1)
-
